@@ -1,7 +1,7 @@
 from data import select_file, process_file
 
-from interface import clear_screen, get_target_specs, display_summary, display_screen
-from interface import add_pile, remove_pile, view_available, view_selection
+from interface import get_target_specs, display_screen
+from interface import add_pile, remove_pile, view_available, view_selection, exit_function
 
 import pandas as pd
 pd.set_option("display.max_rows", None)
@@ -46,9 +46,7 @@ def main():
                 view_selection(selected_df)
 
             case "5":
-                clear_screen()
-                display_summary(vessel, show_remaining= False)
-                print("\nThank you!\n")
+                exit_function(vessel)
                 break
 
             case _:

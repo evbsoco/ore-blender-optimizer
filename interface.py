@@ -195,3 +195,7 @@ def view_available(all_df, selected_df):
         )
     )
 
+def exit_function(vessel):
+    clear_screen()
+    display_summary(vessel, show_remaining= False)
+    print("\nThank you!\n")
