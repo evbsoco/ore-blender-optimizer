@@ -1,25 +1,58 @@
-# Ore Blending Optimizer
-A Python-based ore blending optimization tool that generates blending plans to meet target grade and tonnage requirements while maximizing stockpile utilization.
+# \# Ore Blending Optimizer
 
+# 
 
-## Current Features
-* Optimizes ore blends based on user-defined constraints.
-* Meets target ore grades and required tonnage.
-* Supports stockpile data from CSV/Excel files.
-* Produces optimized blending recommendations.
+# A Python-based console application for manually creating and evaluating ore blends. The program allows users to select stockpiles from an inventory and instantly calculates the resulting blend tonnage and weighted-average ore grades.
 
+# 
 
-## Technologies
-* Python
-* Pandas
+# \## Features
 
+# 
 
-## Future Improvements
+# \- Import inventory data from Excel.
 
-* Interactive graphical interface
-* Multi-grade optimization
-* Mining equipment and operational constraints
-* Export results to Excel and PDF
+# \- Build ore blends by selecting stockpiles.
 
+# \- Calculate weighted-average ore grades and total tonnage.
 
+# \- Compare the current blend against target vessel specifications.
+
+# 
+
+# \## Input Requirements
+
+# 
+
+# The application accepts an Excel inventory file with a specific worksheet and column format. See \*\*INVENTORY-REQUIREMENTS.md\*\* for the complete file specification.
+
+# 
+
+# \## Current Status
+
+# 
+
+# This project currently functions as a \*\*manual ore blending calculator\*\*, where users choose stockpiles and the application updates blend grades and tonnage in real time.
+
+# 
+
+# \## Planned Features
+
+# 
+
+# \- Automatic ore blending optimization algorithm.
+
+# \- Excel export of optimized blending plans.
+
+# \- Desktop graphical user interface (GUI).
+
+# \- Mining and operational constraints.
+
+# 
+
+# \## Future Vision
+
+# 
+
+# Transform this tool into an intelligent ore blending optimizer that automatically generates practical blending plans while satisfying grade, tonnage, and operational requirements.
 
