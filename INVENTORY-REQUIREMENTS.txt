@@ -1,0 +1,35 @@
+Ore Blending Optimizer
+Inventory File Requirements
+========================================
+
+The input inventory must be an Excel workbook (.xlsx or .xls).
+
+Worksheet Name
+--------------
+The workbook must contain a worksheet named:
+
+    INVENTORY (DATA)
+
+Required Columns
+----------------
+The worksheet must contain the following columns exactly as written:
+
+- Ext ID
+- Contractor
+- Stockyard
+- Pile
+- WMT
+- Ni
+- Fe
+- Al2O3
+- SiO2
+- MgO
+- Remarks
+
+Notes
+-----
+- Column names are case-sensitive.
+- Additional columns are allowed and will be ignored.
+- Missing or incorrectly named required columns will cause the program to terminate.
+- Ensure numeric columns (WMT, Ni, Fe, Al2O3, SiO2, MgO) contain valid numeric values.
+- Contact developer in case of column changes.
