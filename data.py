@@ -7,31 +7,7 @@ from tkinter import filedialog
 import pandas as pd
 import numpy as np
 
-from interface import SEPARATOR
-
-SHEET_NAME = "INVENTORY (DATA)"
-REQUIRED_COLUMNS = [
-    "Ext ID",
-    "Contractor",
-    "Stockyard",
-    "Pile",
-    "WMT",
-    "Ni",
-    "Fe",
-    "Al2O3",
-    "SiO2",
-    "MgO",
-    "Remarks"
-]
-ROUND_COLUMNS = {
-    "Ni": 2,
-    "Fe": 2,
-    "Al2O3": 2,
-    "SiO2": 2,
-    "MgO": 2,
-    "WMT": 0
-}
-
+from config import SHEET_NAME, REQUIRED_COLUMNS, SEPARATOR
 
 def select_file():
     """

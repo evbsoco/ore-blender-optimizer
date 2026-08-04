@@ -3,11 +3,8 @@ import pandas as pd
 
 from tabulate import tabulate
 
-from data import create_vessel, get_float, update_vessel, ROUND_COLUMNS
-
-LABEL_WIDTH = 18
-SEPARATOR = "-" * 80
-
+from data import create_vessel, update_vessel
+from config import SEPARATOR, LABEL_WIDTH, ROUND_COLUMNS
 
 def clear_screen():
     """
