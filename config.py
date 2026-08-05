@@ -1,5 +1,6 @@
 SHEET_NAME = "INVENTORY (DATA)"
 REQUIRED_COLUMNS = [
+    "ORE",
     "Ext ID",
     "Contractor",
     "Stockyard",

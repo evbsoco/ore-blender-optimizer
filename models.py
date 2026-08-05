@@ -1,10 +1,10 @@
 from csv_loader import load_inventory
 
-VALID_ELEMENTS = frozenset({"ni", "fe", "al", "si", "mg"})
+from config import VALID_ELEMENTS
 
 class OrePile:
 
-    def __init__(self, index, material, ext_id, contractor, stockyard, pile, wmt, ni, fe, al, si, mg):
+    def __init__(self, index, material, ext_id, contractor, stockyard, pile, wmt, ni, fe, al, si, mg, remarks):
 
         # Index Validator
         if not isinstance(index, int):
@@ -47,6 +47,7 @@ class OrePile:
         self.al = float(al)
         self.si = float(si)
         self.mg = float(mg)
+        self.remarks = remarks
 
     # Methods
     def contained(self, element):
