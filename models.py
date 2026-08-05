@@ -203,11 +203,26 @@ class Inventory:
 
         raise ValueError(f"Pile index '{index}' was not found in the Inventory.")
 
-    def load_csv(self):
+    def create_piles(self):
         self.clear_piles()
 
-        piles = load_inventory()    
-        for pile in piles:
+        rows = load_inventory()    
+
+        for row in rows:
+            pile = OrePile(
+                index=row["ID"],
+                ext_id=row["Ext ID"],
+                contractor=row["Contractor"],
+                stockyard=row["Stockyard"],
+                pile=row["Pile"],
+                wmt=row["WMT"],
+                ni=row["Ni"],
+                fe=row["Fe"],
+                al=row["Al2O3"],
+                si=row["SiO2"],
+                mg=row["MgO"],
+            )
+
             self.add_pile(pile)
 
         return len(self.piles)
