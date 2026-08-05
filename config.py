@@ -12,6 +12,9 @@ REQUIRED_COLUMNS = [
     "MgO",
     "Remarks"
 ]
+VALID_ELEMENTS = frozenset({
+    "ni", "fe", "al", "si", "mg"
+})
 ROUND_COLUMNS = {
     "Ni": 2,
     "Fe": 2,
