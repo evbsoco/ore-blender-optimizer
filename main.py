@@ -1,5 +1,6 @@
 from models.inventory import Inventory
 from app.loader import load_inventory
+from models.vessel import Vessel
 
 from app.interface import (
     clear_screen,
@@ -21,7 +22,9 @@ def main():
     """
 
     clear_screen()
-    vessel = get_vessel_specs()
+
+    vessel_data = get_vessel_specs()
+    vessel = Vessel(**vessel_data)
 
     inventory = Inventory()
 

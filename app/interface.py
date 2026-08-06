@@ -5,8 +5,6 @@ from tabulate import tabulate
 
 from config.config import SEPARATOR, LABEL_WIDTH, ROUND_COLUMNS
 
-from models.vessel import Vessel
-
 def clear_screen():
     """
     Clears the console screen.
@@ -34,19 +32,15 @@ def get_vessel_specs():
 
     print("Vessel Specifications\n")
 
-    name = input("Vessel Name: ").strip().upper()
-    material = input("Material: ").strip().upper()
-    capacity_target = input_float("Vessel Capacity (WMT): ")
-    fe_spec = input_float("Vessel Fe Requirement: ")
-    ni_spec = input_float("Vessel Ni Requirement: ")
+    vessel_data = {
+        "name": input("Vessel Name: ").strip().upper(),
+        "material": input("Material: ").strip().upper(),
+        "capacity_target": input_float("Vessel Capacity (WMT): "),
+        "fe_spec": input_float("Vessel Fe Requirement: "),
+        "ni_spec": input_float("Vessel Ni Requirement: ")
+    }
 
-    return Vessel(
-        name= name,
-        material= material,
-        capacity_target= capacity_target,
-        fe_spec= fe_spec,
-        ni_spec= ni_spec
-    )
+    return vessel_data
 
 def display_summary(vessel, show_remaining_capacity=True):
     """
