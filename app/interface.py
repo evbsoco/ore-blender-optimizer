@@ -113,6 +113,9 @@ def add_pile(inventory, vessel):
         print(e)
 
 def remove_pile(inventory, vessel):
+    if not vessel.piles:
+        print("No piles currently selected in the vessel.")
+        return
 
     try:
         pile_id = int(input("Pile to remove: "))
