@@ -1,0 +1,177 @@
+import os
+import pandas as pd
+
+from tabulate import tabulate
+
+from config.config import SEPARATOR, LABEL_WIDTH, ROUND_COLUMNS
+
+from models.vessel import Vessel
+
+def clear_screen():
+    """
+    Clears the console screen.
+    """
+
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+def input_float(prompt):
+    """
+    Repeatedly prompts the user until a valid
+    floating-point number is entered.
+
+    Returns:
+        float: User input.
+    """
+
+    while True:
+        try:
+            return float(input(prompt))
+        except ValueError:
+            print("Please enter a valid number.")
+
+def get_vessel_specs():
+
+    print("Vessel Specifications\n")
+
+    name = input("Vessel Name: ").strip().upper()
+    material = input("Material: ").strip().upper()
+    capacity_target = input_float("Vessel Capacity (WMT): ")
+    fe_spec = input_float("Vessel Fe Requirement: ")
+    ni_spec = input_float("Vessel Ni Requirement: ")
+
+    return Vessel(
+        name= name,
+        material= material,
+        capacity_target= capacity_target,
+        fe_spec= fe_spec,
+        ni_spec= ni_spec
+    )
+
+def display_summary(vessel, show_remaining_capacity=True):
+    """
+    Displays the current vessel summary,
+    including capacity, target grades,
+    and current blend statistics.
+    """
+
+    current_wmt = vessel.total_wmt
+    current_fe = vessel.average_grade("fe")
+    current_ni = vessel.average_grade("ni")
+
+    remaining_wmt = vessel.capacity_target - current_wmt
+    fe_diff = current_fe - vessel.fe_spec
+    ni_diff = current_ni - vessel.ni_spec
+
+    print("Vessel Specifications\n")
+
+    print(f"{'Vessel Name:':<{LABEL_WIDTH}}{vessel.name}")
+    print(f"{'Capacity:':<{LABEL_WIDTH}}{vessel.capacity_target:,.0f} WMT")
+    print(
+        f"{'Target Specs:':<{LABEL_WIDTH}}"
+        f"{vessel.fe_spec:.2f}% Fe / {vessel.ni_spec:.2f}% Ni\n"
+    )
+
+    print(f"{'Selected Piles:':<{LABEL_WIDTH}}{len(vessel.piles)}")
+
+    if show_remaining_capacity:
+        print(
+            f"{'Current WMT:':<{LABEL_WIDTH}}"
+            f"{current_wmt:,.0f} WMT "
+            f"(Remaining: {remaining_wmt:,.0f} WMT)"
+        )
+    else:
+        print(f"{'Current WMT:':<{LABEL_WIDTH}}{current_wmt:,.0f} WMT")
+
+    print(f"{'Current Fe:':<{LABEL_WIDTH}}{current_fe:.2f}% ({fe_diff:+.2f}%)")
+    print(f"{'Current Ni:':<{LABEL_WIDTH}}{current_ni:.2f}% ({ni_diff:+.2f}%)")
+
+def display_screen(vessel, show_remaining=True):
+    """Clears the console and displays the vessel summary."""
+
+    clear_screen()
+    display_summary(vessel, show_remaining)
+    print(SEPARATOR)
+
+def add_pile(inventory, vessel):
+
+    try:
+        pile_id = int(input("Pile to add: "))
+    except ValueError:
+        print("Please enter a valid ID.")
+        return
+
+    try:
+        pile = inventory.get_pile(pile_id)
+
+        inventory.remove_pile(pile)
+        vessel.add_pile(pile)
+
+        print("Pile added.")
+
+    except (TypeError, ValueError) as e:
+        print(e)
+
+def remove_pile(inventory, vessel):
+
+    try:
+        pile_id = int(input("Pile to remove: "))
+    except ValueError:
+        print("Please enter a valid ID.")
+        return
+
+    try:
+        pile = vessel.get_pile(pile_id)
+
+        vessel.remove_pile(pile)
+        inventory.add_pile(pile)
+
+        print("Pile removed.")
+
+    except (TypeError, ValueError) as e:
+        print(e)
+
+def view_selection(vessel):
+    display_piles(vessel.piles)
+
+def view_available(inventory):
+    display_piles(inventory.piles)
+
+def display_piles(piles):
+
+    rows = []
+
+    if not piles:
+        print("No piles to display.")
+        return
+
+    for p in piles:
+        rows.append({
+            "Pile Index": p.index,
+            "Ext ID": p.ext_id,
+            "Contractor": p.contractor,
+            "Stockyard": p.stockyard,
+            "Pile No": p.pile,
+            "WMT": p.wmt,
+            "Fe": p.fe,
+            "Ni": p.ni
+        })
+
+    df = pd.DataFrame(rows).round(ROUND_COLUMNS)
+
+    print(
+        tabulate(
+            df,
+            headers="keys",
+            tablefmt="grid",
+            showindex=False,
+            colalign=("center",) * len(df.columns),
+            numalign="center",
+            stralign="center"
+        )
+    )
+
+def exit_function(vessel):
+    clear_screen()
+    display_summary(vessel, show_remaining_capacity= False)
+    print("\nThank you!\n")
