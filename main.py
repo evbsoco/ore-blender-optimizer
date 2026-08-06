@@ -1,10 +1,16 @@
-from data import select_file, process_file
+from models.inventory import Inventory
+from app.loader import load_inventory
 
-from interface import get_target_specs, display_screen
-from interface import add_pile, remove_pile, view_available, view_selection, exit_function
-
-import pandas as pd
-pd.set_option("display.max_rows", None)
+from app.interface import (
+    clear_screen,
+    get_vessel_specs,
+    display_screen,
+    view_available,
+    view_selection,
+    add_pile,
+    remove_pile,
+    exit_function,
+)
 
 def main():
     """
@@ -14,15 +20,27 @@ def main():
     and the overall blending workflow.
     """
 
-    vessel = get_target_specs()
-    file = select_file()
-    df = process_file(file)
+    clear_screen()
+    vessel = get_vessel_specs()
 
-    selected_df = df.iloc[0:0].copy()
+    inventory = Inventory()
+
+    try:
+        rows = load_inventory()    
+        count = inventory.load_rows(rows)
+        print(f"\nSuccessfully loaded {count} piles.")
+    except Exception as e:
+        print(f"\nError loading inventory: {e}")
+        return
+
+    input("\nPress Enter to continue...")
+
     while True:
+
         display_screen(vessel)
 
-        print("Action:\n1. View Available Piles")
+        print("Action:")
+        print("1. View Available Piles")
         print("2. Add Pile")
         print("3. Remove Pile")
         print("4. View Selected Piles")
@@ -33,17 +51,18 @@ def main():
         display_screen(vessel)
 
         match choice:
+
             case "1":
-                view_available(df, selected_df)
-            
+                view_available(inventory)
+
             case "2":
-                selected_df, vessel = add_pile(df, selected_df, vessel)
+                add_pile(inventory, vessel)
 
             case "3":
-                selected_df, vessel = remove_pile(selected_df, vessel)
+                remove_pile(inventory, vessel)
 
             case "4":
-                view_selection(selected_df)
+                view_selection(vessel)
 
             case "5":
                 exit_function(vessel)
