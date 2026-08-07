@@ -1,3 +1,5 @@
+# Ore Blending Optimizer Version 1.2 
+
 from models.inventory import Inventory
 from app.loader import load_inventory
 from models.vessel import Vessel

@@ -1,3 +1,5 @@
+# Ore Blending Optimizer Version 1.2 
+
 from models.orepile import OrePile
 
 from config.config import VALID_ELEMENTS

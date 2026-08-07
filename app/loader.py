@@ -1,3 +1,5 @@
+# Ore Blending Optimizer Version 1.2 
+
 from pathlib import Path
 
 import tkinter as tk

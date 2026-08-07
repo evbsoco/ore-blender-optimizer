@@ -1,3 +1,5 @@
+# Ore Blending Optimizer Version 1.2 
+
 import os
 import pandas as pd
 
