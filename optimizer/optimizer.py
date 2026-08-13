@@ -13,12 +13,7 @@ class OreBlenderOptimizer:
         0 -> not consumed.
     """
 
-    def __init__(
-        self,
-        inventory,
-        vessel,
-        tolerance=1e-5,
-    ):
+    def __init__(self, inventory, vessel, tolerance=1e-5):
         self.inventory = inventory
         self.vessel = vessel
         self.tolerance = tolerance
