@@ -6,7 +6,7 @@ from config.config import VALID_ELEMENTS
 
 class Vessel:
 
-    def __init__(self, name, material, capacity_target, ni_spec, fe_spec):
+    def __init__(self, name, material, capacity_target, capacity_threshold, ni_spec, fe_spec):
 
         # Name validator
         if not name.strip():
@@ -22,6 +22,12 @@ class Vessel:
         if capacity_target <= 0:
             raise ValueError("Capacity target must be greater than zero.")
 
+        # Threshold validator
+        if not isinstance(capacity_threshold, (int, float)):
+            raise TypeError("Capacity threshold target must be numeric.")
+        if capacity_threshold <= 0:
+            raise ValueError("Capacity threshold target must be greater than zero.")
+
         # Grade Specs validator
         if not isinstance(ni_spec, (int, float)):
             raise TypeError("Ni specification must be numeric.")
@@ -33,6 +39,7 @@ class Vessel:
         self.material = material
 
         self.capacity_target = float(capacity_target)
+        self.capacity_threshold = float(capacity_threshold)
         self.ni_spec = float(ni_spec)
         self.fe_spec = float(fe_spec)
 

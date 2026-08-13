@@ -3,6 +3,7 @@
 from models.inventory import Inventory
 from app.loader import load_inventory
 from models.vessel import Vessel
+from optimizer.optimizer import OreBlenderOptimizer
 
 from app.interface import (
     clear_screen,
@@ -34,49 +35,83 @@ def main():
         rows = load_inventory()    
         count = inventory.load_rows(rows)
         print(f"\nSuccessfully loaded {count} piles.")
+
     except Exception as e:
         print(f"\nError loading inventory: {e}")
         return
 
     input("\nPress Enter to continue...")
 
-    while True:
+    clear_screen()
+    
+    print("\nPlease do not exit. Starting optimizer...")
 
-        display_screen(vessel)
+    # -----------------------------
+    # Optimize
+    # -----------------------------
 
-        print("Action:")
-        print("1. View Available Piles")
-        print("2. Add Pile")
-        print("3. Remove Pile")
-        print("4. View Selected Piles")
-        print("5. Exit")
+    optimizer = OreBlenderOptimizer(
+        inventory=inventory,
+        vessel=vessel
+    )    
 
-        choice = input("\nChoice: ").strip()
+    result = optimizer.solve()
 
-        display_screen(vessel)
+    # -----------------------------
+    # Display result
+    # -----------------------------
 
-        match choice:
+    clear_screen()
 
-            case "1":
-                view_available(inventory)
+    print("=== OPTIMIZATION RESULT ===")
 
-            case "2":
-                add_pile(inventory, vessel)
+    print(
+        f"Vessel capacity: "
+        f"{vessel.capacity_target:,.0f} WMT"
+    )
 
-            case "3":
-                remove_pile(inventory, vessel)
+    print(
+        f"Allowed maximum: "
+        f"{vessel.capacity_target + vessel.capacity_threshold:,.0f} WMT"
+    )
 
-            case "4":
-                view_selection(vessel)
+    print(
+        f"Required Ni: "
+        f"{vessel.ni_spec:.3f}"
+    )
 
-            case "5":
-                exit_function(vessel)
-                break
+    print(
+        f"Required Fe: "
+        f"{vessel.fe_spec:.3f}"
+    )
 
-            case _:
-                print("Not included in Actions. Please choose a correct Action.")
+    print("\nSelected piles:")
 
-        input("\nPress Enter to proceed...")
+    print("\nIndex\tPile\tWMT\tNi\tFe")
+
+    for pile in result["selected_piles"]:
+        print(
+            f"{pile.index}\t"
+            f"{pile.pile}\t"
+            f"{pile.wmt:.0f}\t"
+            f"{pile.ni:.3f}\t"
+            f"{pile.fe:.3f}"
+        )
+
+    print(
+        "\nTotal WMT:",
+        f"{result['total_wmt']:,.0f}"
+    )
+
+    print(
+        "Blended Ni:",
+        f"{result['ni']:.3f}"
+    )
+
+    print(
+        "Blended Fe:",
+        f"{result['fe']:.3f}"
+    )
 
 if __name__ == "__main__":
     main()

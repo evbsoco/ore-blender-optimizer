@@ -38,6 +38,7 @@ def get_vessel_specs():
         "name": input("Vessel Name: ").strip().upper(),
         "material": input("Material: ").strip().upper(),
         "capacity_target": input_float("Vessel Capacity (WMT): "),
+        "capacity_threshold": input_float("Vessel Capacity Threshold (WMT): "),
         "fe_spec": input_float("Vessel Fe Requirement: "),
         "ni_spec": input_float("Vessel Ni Requirement: ")
     }
