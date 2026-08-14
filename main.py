@@ -61,6 +61,8 @@ def main():
     # Display result
     # -----------------------------
 
+    waiting = input("\n\nPlease press enter to continue...")
+
     clear_screen()
 
     print("=== OPTIMIZATION RESULT ===")
@@ -87,15 +89,23 @@ def main():
 
     print("\nSelected piles:")
 
-    print("\nIndex\tPile\tWMT\tNi\tFe")
+    print("\nIndex\tOre\tExt ID\tStockyard\tContractor\tPile\t\tWMT\tNi\tFe\tAl2O3\tSiO2\tMgO\tRemarks")
 
     for pile in result["selected_piles"]:
         print(
             f"{pile.index}\t"
-            f"{pile.pile}\t"
-            f"{pile.wmt:.0f}\t"
-            f"{pile.ni:.3f}\t"
-            f"{pile.fe:.3f}"
+            f"{pile.material}\t"
+            f"{pile.ext_id}\t"
+            f"{pile.stockyard}\t\t"
+            f"{pile.contractor}\t\t"
+            f"{pile.pile}\t\t"
+            f"{pile.wmt:,.0f}\t"
+            f"{pile.ni:.2f}\t"
+            f"{pile.fe:.2f}\t"
+            f"{pile.al:.2f}\t"
+            f"{pile.si:.2f}\t"
+            f"{pile.mg:.2f}\t"
+            f"{pile.remarks}"
         )
 
     print(
@@ -105,12 +115,12 @@ def main():
 
     print(
         "Blended Ni:",
-        f"{result['ni']:.3f}"
+        f"{result['ni']:.2f}"
     )
 
     print(
         "Blended Fe:",
-        f"{result['fe']:.3f}"
+        f"{result['fe']:.2f}"
     )
 
 if __name__ == "__main__":

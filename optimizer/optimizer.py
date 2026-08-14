@@ -604,6 +604,10 @@ class OreBlenderOptimizer:
         if not selected_piles:
             raise RuntimeError( "Secondary optimization returned an empty pile selection." )
 
+        print(
+            f"Primary grade optimization complete."
+        )
+
         return selected_piles
 
     # =========================================================
