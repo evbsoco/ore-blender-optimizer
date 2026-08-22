@@ -8,31 +8,36 @@ class Vessel:
 
     def __init__(self, name, material, capacity_target, capacity_threshold, ni_spec, fe_spec):
 
-        # Name validator
+        # --------------------------- VESSEL NAME ---------------------------
         if not name.strip():
             raise ValueError("Vessel name cannot be empty.")
 
-        # Material validator
-        if not material.strip():
-            raise ValueError("Material cannot be empty.")
+        # ------------------------- VESSEL MATERIAL -------------------------
+        if material.upper() not in ("LIMONITE", "SAPROLITE"):
+            raise ValueError("Material must be either Limonite or Saprolite.")
 
-        # Capacity validator
+        # ------------------------- VESSEL CAPACITY -------------------------
         if not isinstance(capacity_target, (int, float)):
-            raise TypeError("Capacity target must be numeric.")
+            raise TypeError("Vessel capacity must be numeric.")
         if capacity_target <= 0:
-            raise ValueError("Capacity target must be greater than zero.")
+            raise ValueError("Vessel capacity must be greater than zero.")
 
-        # Threshold validator
+        # -------------------- VESSEL CAPACITY THRESHOLD --------------------
         if not isinstance(capacity_threshold, (int, float)):
             raise TypeError("Capacity threshold target must be numeric.")
         if capacity_threshold <= 0:
             raise ValueError("Capacity threshold target must be greater than zero.")
 
-        # Grade Specs validator
+        # --------------------------- GRADE SPECS ---------------------------
         if not isinstance(ni_spec, (int, float)):
             raise TypeError("Ni specification must be numeric.")
+        if ni_spec <= 0 or ni_spec >= 100:
+            raise ValueError("Ni specification must be between 0% and 100%.\n")
+
         if not isinstance(fe_spec, (int, float)):
             raise TypeError("Fe specification must be numeric.")
+        if fe_spec <= 0 or fe_spec >= 100:
+            raise ValueError("Fe specification must be between 0% and 100%.\n")
 
         # Attributes
         self.name = name

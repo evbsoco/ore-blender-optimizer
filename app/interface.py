@@ -14,7 +14,6 @@ def clear_screen():
 
     os.system("cls" if os.name == "nt" else "clear")
 
-
 def input_float(prompt):
     """
     Repeatedly prompts the user until a valid
@@ -31,16 +30,68 @@ def input_float(prompt):
             print("Please enter a valid number.")
 
 def get_vessel_specs():
+    """
+    Prompt the user to enter vessel specifications.
+
+    Validates all inputs before returning the vessel data.
+    The material must be either LIMONITE or SAPROLITE.
+    Numeric vessel specifications must satisfy their respective
+    minimum and non-negative constraints.
+
+    Returns:
+        dict: Validated vessel specifications containing:
+            - name: Vessel name
+            - material: LIMONITE or SAPROLITE
+            - capacity_target: Target vessel capacity in WMT
+            - capacity_threshold: Maximum allowable capacity excess in WMT
+            - fe_spec: Required Fe grade
+            - ni_spec: Required Ni grade
+    """
 
     print("Vessel Specifications\n")
 
+    while True:
+
+        # --------------------------- VESSEL NAME ---------------------------
+        name = input("Vessel Name: ").strip().upper()
+        if not name:
+            print("Vessel name cannot be empty.\n")
+            continue
+
+        # ------------------------- VESSEL MATERIAL -------------------------
+        material = input("Material (Limonite/Saprolite): ").strip().upper()
+        if material not in ("LIMONITE", "SAPROLITE"):
+            print("Invalid material. Please enter Limonite or Saprolite.\n")
+            continue
+
+        # ------------------------- VESSEL CAPACITY -------------------------
+        capacity_target = input_float("Vessel Capacity (WMT): ")
+        if capacity_target <= 0:
+            print("Vessel capacity must be greater than 0.\n")
+            continue
+
+        # ------------------------- VESSEL FE GRADE -------------------------
+        fe_spec = input_float("Vessel Fe Requirement: ")
+        if fe_spec <= 0 or fe_spec >= 100:
+            print("Fe specification must be between 0% and 100%.\n")
+            continue
+
+        # ------------------------- VESSEL NI GRADE -------------------------
+        ni_spec = input_float("Vessel Ni Requirement: ")
+        if ni_spec <= 0 or ni_spec >= 100:
+            print("Ni specification must be between 0% and 100%.\n")
+            continue
+
+        # ----------------------- ALL INPUTS ARE VALID -----------------------
+        break
+
     vessel_data = {
-        "name": input("Vessel Name: ").strip().upper(),
-        "material": input("Material: ").strip().upper(),
-        "capacity_target": input_float("Vessel Capacity (WMT): "),
-        "capacity_threshold": input_float("Vessel Capacity Threshold (WMT): "),
-        "fe_spec": input_float("Vessel Fe Requirement: "),
-        "ni_spec": input_float("Vessel Ni Requirement: ")
+        "name": name,
+        "material": material,
+        "capacity_threshold": 5000,
+        "capacity_target": capacity_target,
+        "fe_spec": fe_spec,
+        "ni_spec": ni_spec
     }
 
     return vessel_data
