@@ -1,3 +1,4 @@
+from config.config import SAPRO_MIN_FE
 import pulp
 
 class OreBlenderOptimizer:
@@ -24,12 +25,34 @@ class OreBlenderOptimizer:
 
     def _get_piles(self):
         """
-        Return the piles available for optimization.
+        Return piles eligible for optimization based on
+        the vessel material.
 
-        Change this if your Inventory stores its piles
-        under a different attribute.
+        Limonite vessel:
+            Limonite + Transition piles
+
+        Saprolite vessel:
+            Saprolite + Transition piles
         """
-        return self.inventory.piles
+
+        vessel_material = self.vessel.material.upper()
+
+        if vessel_material == "LIMONITE":
+            allowed_materials = ("LIMONITE", "TRANSITION")
+
+        elif vessel_material == "SAPROLITE":
+            allowed_materials = ("SAPROLITE", "TRANSITION")
+
+        else:
+            raise ValueError(
+                f"Unsupported vessel material: {vessel_material}"
+            )
+
+        return [
+            pile
+            for pile in self.inventory.piles
+            if pile.material.upper() in allowed_materials
+        ]
 
     def _get_total_wmt(self, selected_piles):
         return sum(pile.wmt for pile in selected_piles)
@@ -102,22 +125,6 @@ class OreBlenderOptimizer:
 
         ni_requirement = self.vessel.ni_spec
         fe_requirement = self.vessel.fe_spec
-
-        # -----------------------------------------------------
-        # Validate requirements
-        # -----------------------------------------------------
-
-        if capacity <= 0:
-            raise ValueError( "Vessel capacity must be greater than zero." )
-
-        if threshold < 0:
-            raise ValueError( "Capacity threshold cannot be negative." )
-
-        if ni_requirement <= 0:
-            raise ValueError( "Ni requirement must be greater than zero." )
-
-        if fe_requirement <= 0:
-            raise ValueError( "Fe requirement must be greater than zero." )
 
         # -----------------------------------------------------
         # Charnes-Cooper bounds
@@ -241,16 +248,45 @@ class OreBlenderOptimizer:
         # Fe requirement
         # -----------------------------------------------------
 
-        model += (
-            pulp.lpSum(
-                pile.wmt
-                * (pile.fe - fe_requirement)
-                * y[pile.index]
-                for pile in piles
+        if self.vessel.material == "SAPROLITE":
+
+            # Minimum Fe = 15%
+            model += (
+                pulp.lpSum(
+                    pile.wmt
+                    * (pile.fe - SAPRO_MIN_FE)
+                    * y[pile.index]
+                    for pile in piles
+                )
+                >= 0,
+                "Minimum_Fe"
             )
-            >= 0,
-            "Minimum_Fe"
-        )
+
+            # Maximum Fe = user-defined requirement
+            model += (
+                pulp.lpSum(
+                    pile.wmt
+                    * (pile.fe - fe_requirement)
+                    * y[pile.index]
+                    for pile in piles
+                )
+                <= 0,
+                "Maximum_Fe"
+            )
+
+        else:
+
+            # Limonite: Fe must be at least the requirement
+            model += (
+                pulp.lpSum(
+                    pile.wmt
+                    * (pile.fe - fe_requirement)
+                    * y[pile.index]
+                    for pile in piles
+                )
+                >= 0,
+                "Minimum_Fe"
+            )
 
         # -----------------------------------------------------
         # Linearization:
