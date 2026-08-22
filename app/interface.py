@@ -88,7 +88,6 @@ def get_vessel_specs():
     vessel_data = {
         "name": name,
         "material": material,
-        "capacity_threshold": 5000,
         "capacity_target": capacity_target,
         "fe_spec": fe_spec,
         "ni_spec": ni_spec

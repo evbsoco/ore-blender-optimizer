@@ -2,11 +2,11 @@
 
 from models.orepile import OrePile
 
-from config.config import VALID_ELEMENTS
+from config.config import VALID_ELEMENTS, VESSEL_CAPACITY_THRESHOLD
 
 class Vessel:
 
-    def __init__(self, name, material, capacity_target, capacity_threshold, ni_spec, fe_spec):
+    def __init__(self, name, material, capacity_target, ni_spec, fe_spec):
 
         # --------------------------- VESSEL NAME ---------------------------
         if not name.strip():
@@ -21,12 +21,6 @@ class Vessel:
             raise TypeError("Vessel capacity must be numeric.")
         if capacity_target <= 0:
             raise ValueError("Vessel capacity must be greater than zero.")
-
-        # -------------------- VESSEL CAPACITY THRESHOLD --------------------
-        if not isinstance(capacity_threshold, (int, float)):
-            raise TypeError("Capacity threshold target must be numeric.")
-        if capacity_threshold <= 0:
-            raise ValueError("Capacity threshold target must be greater than zero.")
 
         # --------------------------- GRADE SPECS ---------------------------
         if not isinstance(ni_spec, (int, float)):
@@ -44,7 +38,7 @@ class Vessel:
         self.material = material
 
         self.capacity_target = float(capacity_target)
-        self.capacity_threshold = float(capacity_threshold)
+        self.capacity_threshold = VESSEL_CAPACITY_THRESHOLD
         self.ni_spec = float(ni_spec)
         self.fe_spec = float(fe_spec)
 
